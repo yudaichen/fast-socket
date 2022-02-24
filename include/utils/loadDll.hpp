@@ -4,18 +4,15 @@
 #include <string>
 #include <functional>
 #include <iostream>
+#include "loadDll.hpp"
 
 #ifdef _WIN32
-
 #include "windows.h"
-
-#endif //_WIN32
-
-#ifdef _WIN32
 typedef HINSTANCE DllHandle;
 #elif __linux__
-typedef void * DllHandle;
-#endif //_WIN32
+#include <dlfcn.h>
+typedef void* DllHandle;
+#endif //FAST_SOCKET_LOAD_DLL_H
 
 /**
  * @brief C ++动态地将任意函数从DLL加载到std :: function
@@ -39,13 +36,6 @@ class loadDll {
 
 #elif __linux__
 
-	template<typename ReturnType, typename... Args>
-	struct TypeParser<ReturnType(Args...)> {
-		static std::function<ReturnType(Args...)> createFunction(const FARPROC lpfnGetProcessID)
-		{
-			return std::function<ReturnType(Args...)>(reinterpret_cast<ReturnType (__cdecl *)(Args...)>(lpfnGetProcessID));
-		}
-	};
 
 #endif //_WIN32
 
@@ -85,30 +75,7 @@ class loadDll {
 		return TypeParser<T>::createFunction(lpfnGetProcessID);
 
 #elif __linux__
-		// Load DLL.
-		dllHandle = dlopen(dllName.c_str(), RTLD_NOW);
 
-		// Check if DLL is loaded.
-		if(dllHandle == NULL){
-			fprintf(stderr,"%s\n",dlerror());
-			return nullptr;
-		}
-
-		// print dll error
-		dlerror();
-
-		// Locate function in DLL.
-		auto lpfnGetProcessID = dlsym(dllHandle,funcName.c_str());
-
-		// Check if function was located.
-		if (!lpfnGetProcessID)
-		{
-			std::cerr << "Could not locate the function \"" << funcName << "\" in DLL\"" << dllName << "\""
-			          << std::endl;
-			return nullptr;
-		}
-
-		return TypeParser<T>::createFunction(lpfnGetProcessID);
 #endif //_WIN32
 		return nullptr;
 	}
@@ -123,19 +90,14 @@ class loadDll {
 		{
 #ifdef _WIN32
 			FreeLibrary(dllHandle);
-#elif __linux__
-			dlclose(dllHandle);
-#endif
+#endif //_WIN32
 		}
 
 	}
 
 private:
-#ifdef _WIN32
-
 	DllHandle dllHandle;
 
-#endif //_WIN32
 };
 
 

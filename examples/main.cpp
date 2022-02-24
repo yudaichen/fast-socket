@@ -3,7 +3,15 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-int main(int argc, char **argv){
+#include <vector>
+
+#include "test_process.hpp"
+#include "test_thread.hpp"
+#include "test_process_communication.hpp"
+#include "test_socket.hpp"
+
+void testBoost()
+{
 	typedef boost::array<std::string, 3> array;
 	array a;
 
@@ -13,9 +21,71 @@ int main(int argc, char **argv){
 
 	std::sort(a.begin(), a.end());
 
-	for (array::const_iterator it = a.begin(); it != a.end(); ++it)
-		std::cout << *it << std::endl;
+	for (const auto & it : a)
+	{
+		std::cout << it << std::endl;
+	}
 
 	std::cout << a.size() << std::endl;
 	std::cout << a.max_size() << std::endl;
+}
+
+void print(const std::string &n)
+{
+	std::cout << n << std::endl;
+}
+
+void print2(const std::string &n)
+{
+	std::cout << "1/" << n << std::endl;
+}
+
+
+void testHaiKang()
+{
+
+	double initNum = 1;
+	std::vector<std::string> numUpper;
+	std::vector<std::string> numUnder;
+	numUpper.emplace_back(std::to_string(static_cast<int>(initNum)));
+	for (int i = 0; i < 15; i++)
+	{
+		initNum = initNum * 1.3;
+		char middleNum[30];
+		sprintf(middleNum, "%.1f", initNum);
+		numUpper.emplace_back(middleNum);
+	}
+
+	initNum = 1;
+	for (int j = 0; j < 15; j++)
+	{
+		if (initNum>= 0.01){
+			initNum = initNum * 0.8;
+		}else if (initNum >= 0.001){
+			initNum = initNum * 0.8 * 10;
+		}else if (initNum >=0.00001){
+			initNum = initNum * 0.8 * 100;
+		} else if (initNum >= 0.000001){
+			numUnder.emplace_back((std::string &)("8000"));
+			break;
+		}
+		int temp = (int)initNum * 100;
+		int clearDecimal = temp * 100;
+		numUnder.emplace_back(std::to_string(clearDecimal));
+	}
+	std::for_each(numUpper.rbegin(), numUpper.rend(), print);
+	std::for_each(numUnder.rbegin(), numUnder.rend(), print2);
+}
+
+int main(int argc, char **argv)
+{
+	start_test_socket();
+	//start_test_haveName_pipe();
+	//start_test_pipe();
+	//test_waitpid();
+	//test_fork();
+	//test_vfork();
+	//start_test_thread();
+	//testBoost();
+	//testHaiKang();
 }

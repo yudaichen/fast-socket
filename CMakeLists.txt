@@ -1,18 +1,24 @@
 #########################################基于vcpkg构建#######################################################
-cmake_minimum_required ( VERSION 3.22.1 )
+if ( WIN32 )
+	cmake_minimum_required ( VERSION 3.22.1 )
+else ()
+	cmake_minimum_required ( VERSION 3.16.3 )
+endif ()
 set ( APP_NAME fastSocket )
 project ( ${APP_NAME} )
 # 构建类型
 set ( CMAKE_BUILD_TYPE "RELEASE" )
 
-set ( CMAKE_TOOLCHAIN_FILE "E:/repository/c++/vcpkg-2021.05.12/scripts/buildsystems/vcpkg.cmake" )
-# 上述语句等价于 cmake -CMAKE_TOOLCHAIN_FILE = E:/repository/c++/vcpkg-2021.05.12/scripts/buildsystems/vcpkg.cmake
-
-if ( DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET )
-	set ( VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "" )
+# 此语句等价于 cmake -CMAKE_TOOLCHAIN_FILE = E:/repository/c++/vcpkg-2021.05.12/scripts/buildsystems/vcpkg.cmake
+if ( WIN32 )
+	set ( CMAKE_TOOLCHAIN_FILE "E:/repository/c++/vcpkg-2021.05.12/scripts/buildsystems/vcpkg.cmake" )
+	if ( DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET )
+		set ( VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "" )
+	endif ()
 endif ()
 
-#c++ 17设置
+
+#c++ 14设置
 set ( CMAKE_CXX_STANDARD 14 )
 if ( CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang" )
 	message ( "-std=c++14" )
@@ -78,27 +84,41 @@ file ( GLOB_RECURSE INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAK
 
 set ( ALL_SRCS ${SOURCE_FILES} ${INCLUDE_FILES} )
 
-find_package ( Boost REQUIRED COMPONENTS system thread filesystem atomic log )
+if ( WIN32 )
+	find_package ( Boost REQUIRED COMPONENTS system thread filesystem atomic log )
+	if ( NOT Boost_FOUND )
+		message ( FATAL_ERROR "Not found Boost" )
+	else ()
+		message ( STATUS "boost include path is : ${Boost_INCLUDE_DIR}" )
+		message ( STATUS "boost libraries is : ${BOOST_LIBRARIES}" )
+		message ( STATUS "boost libraries dir is : ${Boost_LIBRARY_DIRS}" )
 
-if ( NOT Boost_FOUND )
-	message ( FATAL_ERROR "Not found Boost" )
-else ()
-	message ( STATUS "boost include path is : ${Boost_INCLUDE_DIR}" )
-	message ( STATUS "boost libraries is : ${BOOST_LIBRARIES}" )
-	message ( STATUS "boost libraries dir is : ${Boost_LIBRARY_DIRS}" )
-
-	include_directories ( ${Boost_INCLUDE_DIRS} )
-	link_directories ( ${Boost_LIBRARY_DIR_RELEASE} )
-	set ( BOOSTLIBS ${Boost_LIBRARIES} PARENT_SCOPE )
-	if ( CMAKE_SYSTEM_NAME MATCHES "Windows" )
-		link_libraries ( ${BOOSTLIBS} )
-	elseif ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
-		link_libraries ( boost_log boost_system boost_thread boost_filesystem boost_atomic boost_date_time boost_chrono boost_regex )
+		include_directories ( ${Boost_INCLUDE_DIRS} )
+		link_directories ( ${Boost_LIBRARY_DIR_RELEASE} )
+		set ( BOOSTLIBS ${Boost_LIBRARIES} PARENT_SCOPE )
+		if ( CMAKE_SYSTEM_NAME MATCHES "Windows" )
+			link_libraries ( ${BOOSTLIBS} )
+		elseif ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
+			link_libraries ( boost_log boost_system boost_thread boost_filesystem boost_atomic boost_date_time boost_chrono boost_regex )
+		endif ()
 	endif ()
-
+else ()
+	set ( BOOST_ROOT "/usr/include/boost" )
+	#添加头文件搜索路径
+	include_directories ( /usr/include )
+	#添加库文件搜索路径
+	link_directories ( /usr/lib/x86_64-linux-gnu )
+	link_libraries ( boost_log boost_system boost_thread boost_filesystem boost_atomic boost_date_time boost_chrono boost_regex )
 endif ()
 
-add_executable ( ${APP_NAME} ${CMAKE_SOURCE_DIR}/examples/main.cpp ${ALL_SRCS} )
+# 添加其他支持
+link_libraries(pthread)
+
+add_executable ( ${APP_NAME} ${CMAKE_SOURCE_DIR}/examples/main.cpp ${ALL_SRCS}
+                 ${CMAKE_SOURCE_DIR}/examples/test_thread.hpp
+                 ${CMAKE_SOURCE_DIR}/examples/test_process.hpp
+                 ${CMAKE_SOURCE_DIR}/examples/test_process_communication.hpp
+                 ${CMAKE_SOURCE_DIR}/examples/test_socket.hpp)
 
 
 install ( TARGETS ${APP_NAME}
