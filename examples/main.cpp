@@ -9,6 +9,7 @@
 #include "test_thread.hpp"
 #include "test_process_communication.hpp"
 #include "test_socket.hpp"
+#include "test_daemon.hpp"
 
 void testBoost()
 {
@@ -79,7 +80,16 @@ void testHaiKang()
 
 int main(int argc, char **argv)
 {
-	start_test_socket();
+	use_file_fd_get_fileName_start();
+	//child_process_exit_signal_by_linux_gc_start();
+	//child_process_exit_signal_start();
+	//signal_handle_start();
+	//register_signal_handler_start();
+	//signal_process_mask();
+	//signal_set_start();
+	//time_linux_start();
+	//testBoost();
+	//start_test_socket();
 	//start_test_haveName_pipe();
 	//start_test_pipe();
 	//test_waitpid();

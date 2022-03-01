@@ -107,18 +107,20 @@ else ()
 	#添加头文件搜索路径
 	include_directories ( /usr/include )
 	#添加库文件搜索路径
-	link_directories ( /usr/lib/x86_64-linux-gnu )
+	#ubuntu link_directories ( /usr/lib/x86_64-linux-gnu )
+	link_directories ( /usr/lib ) #cygwin
 	link_libraries ( boost_log boost_system boost_thread boost_filesystem boost_atomic boost_date_time boost_chrono boost_regex )
 endif ()
 
 # 添加其他支持
-link_libraries(pthread)
+link_libraries ( pthread )
 
 add_executable ( ${APP_NAME} ${CMAKE_SOURCE_DIR}/examples/main.cpp ${ALL_SRCS}
                  ${CMAKE_SOURCE_DIR}/examples/test_thread.hpp
                  ${CMAKE_SOURCE_DIR}/examples/test_process.hpp
                  ${CMAKE_SOURCE_DIR}/examples/test_process_communication.hpp
-                 ${CMAKE_SOURCE_DIR}/examples/test_socket.hpp)
+                 ${CMAKE_SOURCE_DIR}/examples/test_socket.hpp
+                 ${CMAKE_SOURCE_DIR}/examples/test_daemon.hpp )
 
 
 install ( TARGETS ${APP_NAME}

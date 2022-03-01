@@ -1,10 +1,9 @@
-#ifndef FAST_SOCKET_LOAD_DLL_H
-#define FAST_SOCKET_LOAD_DLL_H
+#ifndef FAST_SOCKET_LOAD_DLL_HPP
+#define FAST_SOCKET_LOAD_DLL_HPP
 
 #include <string>
 #include <functional>
 #include <iostream>
-#include "loadDll.hpp"
 
 #ifdef _WIN32
 #include "windows.h"
@@ -12,7 +11,9 @@ typedef HINSTANCE DllHandle;
 #elif __linux__
 #include <dlfcn.h>
 typedef void* DllHandle;
-#endif //FAST_SOCKET_LOAD_DLL_H
+#else
+typedef void* DllHandle;
+#endif //_WIN32
 
 /**
  * @brief C ++动态地将任意函数从DLL加载到std :: function
@@ -75,7 +76,7 @@ class loadDll {
 		return TypeParser<T>::createFunction(lpfnGetProcessID);
 
 #elif __linux__
-
+		return nullptr;
 #endif //_WIN32
 		return nullptr;
 	}
@@ -100,5 +101,6 @@ private:
 
 };
 
+#endif //FAST_SOCKET_LOAD_DLL_HPP
 
-#endif //FAST_SOCKET_LOAD_DLL_H
+
