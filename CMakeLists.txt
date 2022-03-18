@@ -157,3 +157,10 @@ add_executable ( factoryPattern
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/canonCamera.hpp
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/nikonCamera.hpp
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/sonyCamera.hpp )
+
+# 抽象工厂
+file ( GLOB_RECURSE ABSTRACT_FACTORY_SOURCE_FILES ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/abstractFactoryPattern/*.hpp )
+
+add_executable ( abstractFactoryPattern
+                 ${ABSTRACT_FACTORY_SOURCE_FILES}
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/abstractFactoryPattern/main.cpp )

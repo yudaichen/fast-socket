@@ -1,0 +1,10 @@
+#ifndef FAST_SOCKET_ORACLE_EXEC_SQL_HPP
+#define FAST_SOCKET_ORACLE_EXEC_SQL_HPP
+
+
+class oracleExecSql {
+
+};
+
+
+#endif //FAST_SOCKET_ORACLE_EXEC_SQL_HPP

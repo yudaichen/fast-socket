@@ -1,0 +1,10 @@
+#ifndef FAST_SOCKET_MYSQL_EXECSQL_HPP
+#define FAST_SOCKET_MYSQL_EXECSQL_HPP
+
+
+class mysqlExecSql {
+
+};
+
+
+#endif //FAST_SOCKET_MYSQL_EXECSQL_HPP
