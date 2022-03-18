@@ -79,6 +79,7 @@ function ( include_sub_directories_recursively root_dir )
 endfunction ()
 
 include_sub_directories_recursively ( ${CMAKE_CURRENT_SOURCE_DIR}/include )
+include_sub_directories_recursively ( ${CMAKE_CURRENT_SOURCE_DIR}/examples )
 file ( GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp )
 file ( GLOB_RECURSE INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp )
 
@@ -115,14 +116,44 @@ endif ()
 # 添加其他支持
 link_libraries ( pthread )
 
-add_executable ( ${APP_NAME} ${CMAKE_SOURCE_DIR}/examples/main.cpp ${ALL_SRCS}
+
+# 简单例子
+#[[add_executable ( ${APP_NAME} ${CMAKE_SOURCE_DIR}/examples/main.cpp ${ALL_SRCS}
                  ${CMAKE_SOURCE_DIR}/examples/test_thread.hpp
                  ${CMAKE_SOURCE_DIR}/examples/test_process.hpp
                  ${CMAKE_SOURCE_DIR}/examples/test_process_communication.hpp
                  ${CMAKE_SOURCE_DIR}/examples/test_socket.hpp
-                 ${CMAKE_SOURCE_DIR}/examples/test_daemon.hpp )
+                 ${CMAKE_SOURCE_DIR}/examples/test_daemon.hpp )]]
+
+#[[# 多线程服务端例子
+add_executable ( cbServer
+                 ${CMAKE_SOURCE_DIR}/examples/CAndB/server.cpp )
+
+# 多线程客户端例子
+add_executable ( cbClient
+                 ${CMAKE_SOURCE_DIR}/examples/CAndB/client.cpp )]]
+
+# 多线程服务端例子
+add_executable ( threadServer
+                 ${CMAKE_SOURCE_DIR}/examples/network/select/server.cpp
+                 ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.h
+                 ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.cpp )
+
+# 多线程客户端例子
+add_executable ( threadClient
+                 ${CMAKE_SOURCE_DIR}/examples/network/select/client.cpp
+                 ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.h
+                 ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.cpp )
 
 
-install ( TARGETS ${APP_NAME}
-          RUNTIME DESTINATION ${CMAKE_SOURCE_DIR}
-          )
+############################################设计模式############################################################
+
+##########################################创建行为模式###########################################################
+
+# 工厂模式
+add_executable ( factoryPattern
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/main.cpp
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/cameraFactory.hpp
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/canonCamera.hpp
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/nikonCamera.hpp
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/sonyCamera.hpp )

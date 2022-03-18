@@ -22,7 +22,7 @@ void testBoost()
 
 	std::sort(a.begin(), a.end());
 
-	for (const auto & it : a)
+	for (const auto &it: a)
 	{
 		std::cout << it << std::endl;
 	}
@@ -60,17 +60,21 @@ void testHaiKang()
 	initNum = 1;
 	for (int j = 0; j < 15; j++)
 	{
-		if (initNum>= 0.01){
+		if (initNum >= 0.01)
+		{
 			initNum = initNum * 0.8;
-		}else if (initNum >= 0.001){
+		} else if (initNum >= 0.001)
+		{
 			initNum = initNum * 0.8 * 10;
-		}else if (initNum >=0.00001){
+		} else if (initNum >= 0.00001)
+		{
 			initNum = initNum * 0.8 * 100;
-		} else if (initNum >= 0.000001){
-			numUnder.emplace_back((std::string &)("8000"));
+		} else if (initNum >= 0.000001)
+		{
+			numUnder.emplace_back((std::string &) ("8000"));
 			break;
 		}
-		int temp = (int)initNum * 100;
+		int temp = (int) initNum * 100;
 		int clearDecimal = temp * 100;
 		numUnder.emplace_back(std::to_string(clearDecimal));
 	}
@@ -80,7 +84,9 @@ void testHaiKang()
 
 int main(int argc, char **argv)
 {
-	use_file_fd_get_fileName_start();
+	thread_create_start();
+	//test_daemon_start();
+	//use_file_fd_get_fileName_start();
 	//child_process_exit_signal_by_linux_gc_start();
 	//child_process_exit_signal_start();
 	//signal_handle_start();
@@ -98,4 +104,5 @@ int main(int argc, char **argv)
 	//start_test_thread();
 	//testBoost();
 	//testHaiKang();
+	return 0;
 }
