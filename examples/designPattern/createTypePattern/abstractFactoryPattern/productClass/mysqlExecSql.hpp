@@ -1,10 +1,16 @@
-#ifndef FAST_SOCKET_MYSQL_EXECSQL_HPP
-#define FAST_SOCKET_MYSQL_EXECSQL_HPP
+#ifndef FAST_SOCKET_MYSQL_EXEC_SQL_HPP
+#define FAST_SOCKET_MYSQL_EXEC_SQL_HPP
 
+#include "execSqlFactory.hpp"
 
-class mysqlExecSql {
+class mysqlExecSql : public execSqlFactory {
+
+	void createExecSql() override
+	{
+		std::cout << "mysql create exec Sql" << std::endl;
+	}
 
 };
 
 
-#endif //FAST_SOCKET_MYSQL_EXECSQL_HPP
+#endif //FAST_SOCKET_MYSQL_EXEC_SQL_HPP

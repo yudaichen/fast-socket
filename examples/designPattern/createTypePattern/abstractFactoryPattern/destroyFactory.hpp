@@ -1,5 +1,6 @@
 #ifndef FAST_SOCKET_DESTROY_FACTORY_HPP
 #define FAST_SOCKET_DESTROY_FACTORY_HPP
+
 #include <iostream>
 
 /**
@@ -8,10 +9,10 @@
 class destroyFactory {
 
 public:
-/**
- * @brief 销毁数据库连接
- */
-virtual void createDestroy();
+	/**
+	 * @brief 销毁数据库连接
+	 */
+	virtual void createDestroy() = 0;
 };
 
 

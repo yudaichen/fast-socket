@@ -1,17 +1,15 @@
-//
-// Created by 余代宸 -Yu DaiChen on 2022/3/18
-// QQ-E-MAIL:250074249@qq.com
-//
+#ifndef FAST_SOCKET_ORACLE_DESTROY_HPP
+#define FAST_SOCKET_ORACLE_DESTROY_HPP
 
-#ifndef FASTSOCKET_ORACLEDESTROY_HPP
-#define FASTSOCKET_ORACLEDESTROY_HPP
+#include "destroyFactory.hpp"
 
+class oracleDestroy : public destroyFactory {
 
-
-class oracleDestroy {
-
+	void createDestroy() override
+	{
+		std::cout << "oracle create destroy" << std::endl;
+	}
 };
 
 
-
-#endif //FASTSOCKET_ORACLEDESTROY_HPP
+#endif //FAST_SOCKET_ORACLE_DESTROY_HPP

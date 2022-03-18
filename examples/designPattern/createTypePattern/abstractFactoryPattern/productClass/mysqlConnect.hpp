@@ -1,9 +1,14 @@
 #ifndef FAST_SOCKET_MYSQL_CONNECT_HPP
 #define FAST_SOCKET_MYSQL_CONNECT_HPP
-#include ""
 
-class mysqlConnect {
+#include "connectFactory.hpp"
 
+class mysqlConnect : public connectFactory {
+
+	void createConnect() override
+	{
+		std::cout << "mysql create connect" << std::endl;
+	}
 };
 
 

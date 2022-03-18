@@ -1,5 +1,6 @@
 #ifndef FAST_SOCKET_CONNECT_FACTORY_HPP
 #define FAST_SOCKET_CONNECT_FACTORY_HPP
+
 #include <iostream>
 
 /**
@@ -8,10 +9,10 @@
 class connectFactory {
 
 public:
-/**
- * @brief 数据库连接
- */
-virtual void createConnect();
+	/**
+	 * @brief 数据库连接
+	 */
+	virtual void createConnect() = 0;
 };
 
 

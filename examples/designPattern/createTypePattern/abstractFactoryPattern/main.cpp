@@ -18,7 +18,7 @@
 
 int main()
 {
-	std::string useDatabaseName = "oracle";
+	std::string useDatabaseName = "sqlServer";
 	DBAbstractFactory *dbAbstractFactory = nullptr;
 	if (useDatabaseName == "oracle")
 	{
