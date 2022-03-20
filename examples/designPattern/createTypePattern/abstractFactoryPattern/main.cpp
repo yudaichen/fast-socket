@@ -8,7 +8,7 @@
 
     @details   ~
     @date      18.03.2022
-    @copyright © Zhu zhao Technologies Co Ltd, 2022. All right reserved.
+    @copyright © Yu Dai Cheng Technologies Co Ltd, 2022. All right reserved.
 *******************************************************************************/
 #include <iostream>
 #include <string>

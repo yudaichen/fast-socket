@@ -164,3 +164,19 @@ file ( GLOB_RECURSE ABSTRACT_FACTORY_SOURCE_FILES ${CMAKE_SOURCE_DIR}/examples/d
 add_executable ( abstractFactoryPattern
                  ${ABSTRACT_FACTORY_SOURCE_FILES}
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/abstractFactoryPattern/main.cpp )
+
+# 单例模式模式
+
+##饿汉模式
+file ( GLOB_RECURSE HUNGRY_MAN_SINGLETON_SOURCE_FILES ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/singletonPattern/hungryMan/*.hpp )
+
+add_executable ( hungry_man_singleton
+                 ${HUNGRY_MAN_SINGLETON_SOURCE_FILES}
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/singletonPattern/hungryMan/main.cpp )
+
+#懒汉模式
+file ( GLOB_RECURSE LAZYBONES_SINGLETON_SOURCE_FILES ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/singletonPattern/lazybones/*.hpp )
+
+add_executable ( lazybones_singleton
+                 ${LAZYBONES_SINGLETON_SOURCE_FILES}
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/singletonPattern/lazybones/main.cpp )
