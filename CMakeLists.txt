@@ -134,13 +134,13 @@ add_executable ( cbClient
                  ${CMAKE_SOURCE_DIR}/examples/CAndB/client.cpp )]]
 
 # 多线程服务端例子
-add_executable ( threadServer
+add_executable ( thread_server
                  ${CMAKE_SOURCE_DIR}/examples/network/select/server.cpp
                  ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.h
                  ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.cpp )
 
 # 多线程客户端例子
-add_executable ( threadClient
+add_executable ( thread_client
                  ${CMAKE_SOURCE_DIR}/examples/network/select/client.cpp
                  ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.h
                  ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.cpp )
@@ -151,7 +151,7 @@ add_executable ( threadClient
 ##########################################创建行为模式###########################################################
 
 # 工厂模式
-add_executable ( factoryPattern
+add_executable ( factory_pattern
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/main.cpp
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/cameraFactory.hpp
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/factoryPattern/canonCamera.hpp
@@ -161,7 +161,7 @@ add_executable ( factoryPattern
 # 抽象工厂
 file ( GLOB_RECURSE ABSTRACT_FACTORY_SOURCE_FILES ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/abstractFactoryPattern/*.hpp )
 
-add_executable ( abstractFactoryPattern
+add_executable ( abstract_factory_pattern
                  ${ABSTRACT_FACTORY_SOURCE_FILES}
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/abstractFactoryPattern/main.cpp )
 
@@ -180,3 +180,11 @@ file ( GLOB_RECURSE LAZYBONES_SINGLETON_SOURCE_FILES ${CMAKE_SOURCE_DIR}/example
 add_executable ( lazybones_singleton
                  ${LAZYBONES_SINGLETON_SOURCE_FILES}
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/singletonPattern/lazybones/main.cpp )
+
+# 构建者模式
+add_executable ( build_pattern
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/builderPattern/main.cpp )
+
+# 原型模式( 拷贝模式 )
+add_executable ( prototype_pattern
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/prototypePattern/main.cpp )
