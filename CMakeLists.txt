@@ -96,7 +96,7 @@ if ( WIN32 )
 
 		include_directories ( ${Boost_INCLUDE_DIRS} )
 		link_directories ( ${Boost_LIBRARY_DIR_RELEASE} )
-		set ( BOOSTLIBS ${Boost_LIBRARIES} PARENT_SCOPE )
+		#set ( BOOSTLIBS ${Boost_LIBRARIES} PARENT_SCOPE )
 		if ( CMAKE_SYSTEM_NAME MATCHES "Windows" )
 			link_libraries ( ${BOOSTLIBS} )
 		elseif ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
@@ -111,10 +111,11 @@ else ()
 	#ubuntu link_directories ( /usr/lib/x86_64-linux-gnu )
 	link_directories ( /usr/lib ) #cygwin
 	link_libraries ( boost_log boost_system boost_thread boost_filesystem boost_atomic boost_date_time boost_chrono boost_regex )
+	# 添加其他支持
+	link_libraries ( pthread )
 endif ()
 
-# 添加其他支持
-link_libraries ( pthread )
+
 
 
 # 简单例子
@@ -133,7 +134,7 @@ add_executable ( cbServer
 add_executable ( cbClient
                  ${CMAKE_SOURCE_DIR}/examples/CAndB/client.cpp )]]
 
-# 多线程服务端例子
+#[[# 多线程服务端例子
 add_executable ( thread_server
                  ${CMAKE_SOURCE_DIR}/examples/network/select/server.cpp
                  ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.h
@@ -143,7 +144,7 @@ add_executable ( thread_server
 add_executable ( thread_client
                  ${CMAKE_SOURCE_DIR}/examples/network/select/client.cpp
                  ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.h
-                 ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.cpp )
+                 ${CMAKE_SOURCE_DIR}/examples/network/wrapError/wrap.cpp )]]
 
 
 ############################################设计模式############################################################
@@ -194,3 +195,11 @@ add_executable ( prototype_pattern
 # 改造者(适配器)模式
 add_executable ( adapter_pattern
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/structuralPattern/adapterPattern/main.cpp )
+
+# 桥接模式模式
+add_executable ( bridge_pattern
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/structuralPattern/bridgePattern/main.cpp )
+
+# 过滤器模式（Filter Pattern）或标准模式（Criteria Pattern）
+add_executable ( filter_criteria_pattern
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/structuralPattern/filterAndCriteriaPattern/main.cpp )

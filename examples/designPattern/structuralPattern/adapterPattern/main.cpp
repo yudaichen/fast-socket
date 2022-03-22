@@ -34,7 +34,6 @@ public:
 };
 
 class ConcreteTarget : public Target {
-
 public:
 
 	void request() override
@@ -55,7 +54,6 @@ public:
 };
 
 class Adapter : public Target {
-
 private:
 
 	Adaptee *_adaptee;
