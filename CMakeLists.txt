@@ -188,3 +188,9 @@ add_executable ( build_pattern
 # 原型模式( 拷贝模式 )
 add_executable ( prototype_pattern
                  ${CMAKE_SOURCE_DIR}/examples/designPattern/createTypePattern/prototypePattern/main.cpp )
+
+##########################################结构型模式###########################################################
+
+# 改造者(适配器)模式
+add_executable ( adapter_pattern
+                 ${CMAKE_SOURCE_DIR}/examples/designPattern/structuralPattern/adapterPattern/main.cpp )
