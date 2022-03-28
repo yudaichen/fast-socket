@@ -1,12 +1,6 @@
-/* Copyright(C)
- * For free
- * All right reserved
- * 
- */
 /**
  * @file System.cpp
  * @brief 系统相关调用工具实现
- * @author highway-9, 787280310@qq.com
  * @version 1.1.0
  * @date 2015-11-28
  */

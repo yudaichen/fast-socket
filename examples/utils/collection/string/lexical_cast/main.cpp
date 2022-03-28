@@ -1,6 +1,7 @@
 #include <iostream>
 #include "lexical_cast.h"
 
+//类型转换函数 基础类型 <-> string 互转
 int main()
 {
     std::string str = "1000";

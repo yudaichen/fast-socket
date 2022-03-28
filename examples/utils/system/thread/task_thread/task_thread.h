@@ -1,7 +1,6 @@
 /**
  * @file task_thread.h
  * @brief 任务线程对象
- * @author chxuan, 787280310@qq.com
  * @version 1.0.0
  * @date 2018-01-02
  */

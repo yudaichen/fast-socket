@@ -1,9 +1,5 @@
 #pragma once
-/*
-功能:封装类型转换
-日期:2018-06-22
-作者:chxuan <787280310@qq.com>
-*/
+
 #include <string>
 
 // 模板特化定义

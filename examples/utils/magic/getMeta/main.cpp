@@ -18,6 +18,7 @@ void func(T& t)
     std::cout << typeid(ret).name() << std::endl;
 }
 
+// 获取成员变量类型
 int main()
 {
     Person p {"Jack", 10};

@@ -1,7 +1,6 @@
 /**
  * @file shared_mutex.h
  * @brief 封装读写锁
- * @author chxuan, 787280310@qq.com
  * @version 1.0.0
  * @date 2018-01-05
  */
