@@ -1,4 +1,4 @@
-#ifndef FAST_SOCKET_MYSQL_FACTORY_HPP
+﻿#ifndef FAST_SOCKET_MYSQL_FACTORY_HPP
 #define FAST_SOCKET_MYSQL_FACTORY_HPP
 
 #include "DBAbstractFactory.hpp"
