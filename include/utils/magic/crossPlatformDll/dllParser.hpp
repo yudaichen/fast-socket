@@ -5,7 +5,7 @@
 #include "windows.h"
 
 typedef HINSTANCE DllHandle;
-typedef FARPROC FunctionAddress
+typedef FARPROC FunctionAddress;
 #else
 
 #include <dlfcn.h>
@@ -23,6 +23,10 @@ typedef void* FunctionAddress;
 #include <functional>
 #include <memory>
 
+
+/**
+ * @brief 跨平台dll加载器
+ */
 class DllParser
 {
 public:
@@ -34,7 +38,7 @@ public:
 	bool load(const std::string &dllFilePath)
 	{
 #ifdef _WIN32
-		m_handle = LoadLibrary(dllName.c_str());
+		m_handle = LoadLibrary(dllFilePath.c_str());
 
 #else
 		m_handle = dlopen(dllFilePath.c_str(), RTLD_NOW);
@@ -42,7 +46,7 @@ public:
 		if (m_handle == nullptr)
 		{
 #ifdef _WIN32
-			std::cerr << "Open dll failed, error: " << dllName << std::endl;
+			std::cerr << "Open dll failed, error: " << dllFilePath << std::endl;
 #else
 			std::cout << "Open dll failed, error: " << dlerror() << std::endl;
 #endif //_WIN32
@@ -60,8 +64,8 @@ public:
 		}
 
 #ifdef _WIN32
-		int ret = FreeLibrary(dllHandle);
-#elif
+		int ret = FreeLibrary(m_handle);
+#else
 		int ret = dlclose(m_handle);
 #endif //_WIN32
 
@@ -72,7 +76,7 @@ public:
 			std::cout << "Close dll failed, error: " << std::endl;
 			return false;
 		}
-#elif
+#else
 		if (ret != 0)
 		{
 			std::cout << "Close dll failed, error: " << dlerror() << std::endl;
@@ -90,14 +94,19 @@ public:
 		if (iteration == m_funcMap.end())
 		{
 #ifdef _WIN32
-			FunctionAddress address = GetProcAddress(dllHandle, funcName.c_str());
+			FunctionAddress address = GetProcAddress(m_handle, funcName.c_str());
 #else
 			FunctionAddress address = dlsym(m_handle, funcName.c_str());
 #endif //_WIN32
 
 			if (address == nullptr)
 			{
+#ifdef _WIN32
+				std::cout << "func is nullptr, error " << std::endl;
+#else
 				std::cout << "func is nullptr, error: " << dlerror() << std::endl;
+#endif //_WIN32
+
 				return nullptr;
 			}
 

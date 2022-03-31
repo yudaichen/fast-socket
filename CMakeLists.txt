@@ -112,13 +112,12 @@ include_directories(include)
 include_directories(src)
 include_directories(test)
 
-
 include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/examples/designPattern)
 include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/examples/network)
 
 # 整合cpp
-file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 file(GLOB_RECURSE INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
 set(ALL_SRCS ${SOURCE_FILES} ${INCLUDE_FILES})
 
@@ -129,7 +128,6 @@ set ( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${ZZ_CMAKE_DIR}" )
 # 包含设计模式
 include ( designPattern )
 # 包含网络
-include ( network )
+#include ( network )
 
-
-
+add_executable( main ${CMAKE_SOURCE_DIR}/src/main.cpp)
