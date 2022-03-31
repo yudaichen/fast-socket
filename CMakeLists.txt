@@ -52,8 +52,6 @@ else ()
 endif ()
 
 
-
-
 # 用于递归添加头文件
 function(include_sub_directories_recursively root_dir)
 
@@ -73,7 +71,6 @@ function(include_sub_directories_recursively root_dir)
         endif ()
     endforeach ()
 endfunction()
-
 
 
 if (WIN32)
@@ -123,11 +120,12 @@ set(ALL_SRCS ${SOURCE_FILES} ${INCLUDE_FILES})
 
 
 #包含cmake工具包 默认与项目根目录同级
-set ( ZZ_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake" )
-set ( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${ZZ_CMAKE_DIR}" )
+set(ZZ_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${ZZ_CMAKE_DIR}")
 # 包含设计模式
-include ( designPattern )
+#include ( designPattern )
 # 包含网络
-#include ( network )
-
-add_executable( main ${CMAKE_SOURCE_DIR}/src/main.cpp)
+if (NOT WIN32)
+    include(network)
+endif ()
+add_executable(main ${CMAKE_SOURCE_DIR}/src/main.cpp)

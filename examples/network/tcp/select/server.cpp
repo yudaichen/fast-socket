@@ -70,17 +70,28 @@ int main(int argc, char *argv[])
 	}        /* 用-1初始化client[] */
 
 	FD_ZERO(&allset);
-	FD_SET(listenfd, &allset); /* 构造select监控文件描述符集 */
+
+	///@brief 构造select监控文件描述符集
+	FD_SET(listenfd, &allset);
 
 	for (;;)
 	{
-		rset = allset;            /* 每次循环时都从新设置select监控信号集 */
+		///@brief 每次循环时都从新设置select监控信号集
+		rset = allset;
 		nready = select(maxfd + 1, &rset, NULL, NULL, NULL);
 
+		/**
+		 * @brief select 返回值
+		 * 负值：select错误
+		 * 正值：某些文件可读写或出错
+		 * 0：等待超时，没有可读写或错误的文件
+		 */
 		if (nready < 0)
 			perr_exit("select error");
+
+		// 连接事件
 		if (FD_ISSET(listenfd, &rset))
-		{ /* new client connection */
+		{
 			cliaddr_len = sizeof(cliaddr);
 			connfd = Accept(listenfd, (struct sockaddr *) &cliaddr, &cliaddr_len);
 			printf("received from %s at PORT %d\n",
@@ -90,31 +101,41 @@ int main(int argc, char *argv[])
 			{
 				if (client[i] < 0)
 				{
-					client[i] = connfd; /* 保存accept返回的文件描述符到client[]里 */
+					///@brief 保存accept返回的文件描述符到client[]里
+					client[i] = connfd;
 					break;
 				}
 			}
-			/* 达到select能监控的文件个数上限 1024 */
+			///@brief 达到select能监控的文件个数上限 1024
 			if (i == FD_SETSIZE)
 			{
 				fputs("too many clients\n", stderr);
 				exit(1);
 			}
 
-			FD_SET(connfd, &allset);    /* 添加一个新的文件描述符到监控信号集里 */
-			if (connfd > maxfd)
-				maxfd = connfd;        /* select第一个参数需要 */
-			if (i > maxi)
-				maxi = i;                /* 更新client[]最大下标值 */
+			///@brief 添加一个新的文件描述符到监控信号集里
+			FD_SET(connfd, &allset);
+			if (connfd > maxfd){
+				///@brief select第一个参数需要
+				maxfd = connfd;
+			}
 
+			///@brief 更新client[]最大下标值
+			if (i > maxi){
+				maxi = i;
+			}
+
+			///@brief 如果没有更多的就绪文件描述符继续回到上面select阻塞监听,负责处理未处理完的就绪文件描述符
 			if (--nready == 0)
-				continue;                /* 如果没有更多的就绪文件描述符继续回到上面select阻塞监听,
-										负责处理未处理完的就绪文件描述符 */
+				continue;
 		}
 		for (i = 0; i <= maxi; i++)
-		{    /* 检测哪个clients 有数据就绪 */
-			if ((sockfd = client[i]) < 0)
+		{
+			///@brief 检测哪个clients 有数据就绪 client[i]默认为-1
+			if ((sockfd = client[i]) < 0){
 				continue;
+			}
+
 			if (FD_ISSET(sockfd, &rset))
 			{
 				if ((n = Read(sockfd, buf, MAXLINE)) == 0)
