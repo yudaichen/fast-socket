@@ -19,9 +19,9 @@ Fastest server
 |Examples | utils | common toolkit sorting|
 |Include | utils collection | project common container encapsulation class header file|
 |Include | utils concurrent | project general multi threaded encapsulation class header file|
-|Include | utils include | project general magic class - header file|
+|Include | utils magic | project general magic class - header file|
 |SRC | utils concurrent | project general multithreading encapsulation class - Implementation|
-|SRC | utils magic | project general magic operation implementation - Implementation|
+|SRC | utils magic | project general magic class - Implementation|
 
 
 

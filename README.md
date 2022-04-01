@@ -12,9 +12,9 @@
 |  examples | utils  |  常用工具包整理 |
 |  include | utils-collection  |  项目通用容器封装类-头文件 |
 |  include | utils-concurrent  |  项目通用多线程封装类-头文件 |
-|  include | utils-include  |  项目通用魔法类-头文件 |
+|  include | utils-magic  |  项目通用魔法类-头文件 |
 |  src | utils-concurrent  |  项目通用多线程封装类-实现 |
-|  src | utils-magic  |  项目通用魔法操作实现-实现 |
+|  src | utils-magic  |  项目通用魔法操作类-实现 |
 
 #### 使用说明
 
