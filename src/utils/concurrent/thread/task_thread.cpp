@@ -1,5 +1,7 @@
 #include "task_thread.h"
 
+using namespace fast;
+
 task_thread::task_thread(const std::function<void()>& func) 
     : func_(func)
 {

@@ -9,6 +9,10 @@ project(${APP_NAME})
 # 构建类型
 set(CMAKE_BUILD_TYPE "RELEASE")
 
+#包含cmake工具包 默认与项目根目录同级
+set(FAST_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${FAST_CMAKE_DIR}")
+
 # 此语句等价于 cmake -CMAKE_TOOLCHAIN_FILE = E:/repository/c++/vcpkg-2021.05.12/scripts/buildsystems/vcpkg.cmake
 if (WIN32)
     set(CMAKE_TOOLCHAIN_FILE "E:/repository/c++/vcpkg-2021.05.12/scripts/buildsystems/vcpkg.cmake")
@@ -72,7 +76,7 @@ function(include_sub_directories_recursively root_dir)
     endforeach ()
 endfunction()
 
-
+# 链接库
 if (WIN32)
     find_package(Boost REQUIRED COMPONENTS system thread filesystem atomic log)
     if (NOT Boost_FOUND)
@@ -103,29 +107,43 @@ else ()
     link_libraries(pthread)
 endif ()
 
+# 编译开关
+set(MAIN ON)
+set(DESIGN_PATTERN OFF)
+set(NETWORK ON)
 
-# 包含头文件目录
-include_directories(include)
-include_directories(src)
-include_directories(test)
+if (MAIN)
+    # 包含头文件目录
+    include_directories(include)
 
-include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/examples/designPattern)
-include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/examples/network)
+    # 递归包含头文件目录
+    include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# 整合cpp
-file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
-file(GLOB_RECURSE INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
-set(ALL_SRCS ${SOURCE_FILES} ${INCLUDE_FILES})
+    # 整合cpp
+    file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
+    file(GLOB_RECURSE INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
 
+    # 归一化
+    set(ALL_SRCS ${SOURCE_FILES} ${INCLUDE_FILES})
 
-#包含cmake工具包 默认与项目根目录同级
-set(ZZ_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${ZZ_CMAKE_DIR}")
-# 包含设计模式
-#include ( designPattern )
-# 包含网络
-if (NOT WIN32)
-    include(network)
+    # 目录设置
+    add_executable(${APP_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp ${ALL_SRCS})
 endif ()
-add_executable(main ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
+# 包含设计模式
+if (DESIGN_PATTERN)
+    include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/examples/designPattern)
+    include(designPattern)
+endif ()
+
+# 包含网络,网络是linux平台
+if (NETWORK)
+    if (NOT WIN32)
+        include_sub_directories_recursively(${CMAKE_CURRENT_SOURCE_DIR}/examples/network)
+        include(network)
+    endif ()
+endif ()
+
+
+
+
