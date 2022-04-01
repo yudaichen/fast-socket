@@ -6,6 +6,25 @@
 using namespace fast;
 
 
+int main()
+{
+	int a=5,b=5;
+	std::cout<<(a&b)<<std::endl;
+
+	a=0,b=7;
+	std::cout<<(a&b)<<std::endl;
+
+
+	std::cout<<(a|b)<<std::endl;
+
+	a=3,b=3;
+	//std::cout<<std::to_string(a~b) <<std::endl;
+	std::cout<<(a^b)<<std::endl;
+	return 0;
+}
+
+
+#if 0
 struct Person
 {
 	std::string name;
@@ -29,6 +48,7 @@ int main()
 	func(p);
 	return 0;
 }
+#endif
 
 #if 0
 int main(int argc, char *argv[])
