@@ -27,7 +27,7 @@ int gettimeofday(struct timeval *tp, void *tzp)
 }
 #endif // PLATFORM_WINDOWS
 
-namespace ec
+namespace fast
 {
 
 Duration::Duration(int64 value, Period period)

@@ -1,121 +1,170 @@
-﻿/**
- * @brief 线程池
- */
-#ifndef _BASE_THREAD_POOL_HPP_
-#define _BASE_THREAD_POOL_HPP_
+#ifndef _THREADPOOL_H
+#define _THREADPOOL_H
 
+#include <vector>
 #include <queue>
+#include <thread>
+#include <mutex>
+#include <memory>
+#include <functional>
+#include <condition_variable>
+#include <atomic>
+#include <type_traits>
 
-namespace fast {
+namespace fast
+{
 
-typedef std::function<void()> TaskMethod;
 
-class ThreadPool
+static const std::size_t max_thread_size = 100;
+
+class thread_pool
 {
 public:
-	ThreadPool()
-		: _inited(false)
-	{}
-	~ThreadPool()
+	using work_thread_ptr = std::shared_ptr<std::thread>;
+	using task_t = std::function<void()>;
+
+	explicit thread_pool()
+		: _is_stop_thread_pool(false)
 	{}
 
-	/// @brief 初始化线程池
-	/// @param[in] threadNum 线程个数
-	bool init(int threadNum = kDefaultThreadNum)
+	~thread_pool()
 	{
-		if (_inited) {
-			return false;
-		}
-		_inited = true;
-		addWorker(threadNum);
-		return _inited;
+		stop();
 	}
 
-	/// @brief 添加线程任务
-	void addTask(const TaskMethod &task)
-	{ _tasks.put(task); }
-
-	/// @brief 等待线程池结束
-	void join()
+	void init_thread_num(std::size_t num)
 	{
-		for (ThreadVector::const_iterator it = _threads.begin(); it != _threads.end(); ++it) {
-			(*it)->join();
+		if (num <= 0 || num > max_thread_size)
+		{
+			std::string str = "Number of threads in the range of 1 to " + std::to_string(max_thread_size);
+			throw std::invalid_argument(str);
 		}
 
-		_threads.clear();
+		for (std::size_t i = 0; i < num; ++i)
+		{
+			work_thread_ptr t = std::make_shared<std::thread>(std::bind(&thread_pool::run_task, this));
+			_thread_vec.emplace_back(t);
+		}
 	}
 
-	/// @brief 得到线程个数
-	size_t size() const { return _threads.size(); }
-
-	/// @brief 结束线程池
-	void terminate()
+	template<typename Function, typename... Args>
+	void add_task(const Function &func, Args... args)
 	{
-		for (ThreadVector::const_iterator it = _threads.begin(); it != _threads.end(); ++it) {
-			(*it)->stop();
+		check_thread_status();
+		task_t task = [&func, args...]
+		{ return func(args...); };
+		add_task_impl(task);
+	}
+
+	template<typename Function, typename... Args>
+	typename std::enable_if<std::is_class<Function>::value>::type add_task(Function &func, Args... args)
+	{
+		check_thread_status();
+		task_t task = [&func, args...]
+		{ return func(args...); };
+		add_task_impl(task);
+	}
+
+	template<typename Function, typename Self, typename... Args>
+	void add_task(const Function &func, Self *self, Args... args)
+	{
+		check_thread_status();
+		task_t task = [&func, &self, args...]
+		{ return (*self.*func)(args...); };
+		add_task_impl(task);
+	}
+
+	void stop()
+	{
+		std::call_once(_call_flag, [this]
+		{ terminate_all(); });
+	}
+
+private:
+	void add_task_impl(const task_t &task)
+	{
+		std::unique_lock<std::mutex> locker(_task_queue_mutex);
+		_task_queue.emplace(std::move(task));
+		_task_get.notify_one();
+	}
+
+	void terminate_all()
+	{
+		std::unique_lock<std::mutex> locker(_task_queue_mutex);
+
+		_is_stop_thread_pool = true;
+		_task_get.notify_all();
+
+		locker.unlock();
+
+		for (auto &iter: _thread_vec)
+		{
+			if (iter != nullptr && iter->joinable())
+			{
+				iter->join();
+			}
+		}
+		_thread_vec.clear();
+
+		clean_task_queue();
+	}
+
+	void run_task()
+	{
+		while (true)
+		{
+			task_t task = nullptr;
+
+			std::unique_lock<std::mutex> locker(_task_queue_mutex);
+
+			while (_task_queue.empty() && !_is_stop_thread_pool)
+			{
+				_task_get.wait(locker);
+			}
+
+			if (_is_stop_thread_pool)
+			{
+				break;
+			}
+
+			if (!_task_queue.empty())
+			{
+				task = std::move(_task_queue.front());
+				_task_queue.pop();
+			}
+
+			locker.unlock();
+
+			if (task != nullptr)
+			{
+				task();
+			}
+		}
+	}
+
+	void clean_task_queue()
+	{
+		while (!_task_queue.empty())
+		{
+			_task_queue.pop();
+		}
+	}
+
+	void check_thread_status()
+	{
+		if (_is_stop_thread_pool)
+		{
+			throw std::runtime_error("ThreadPool is stoped");
 		}
 	}
 
 private:
-	THEFOX_DISALLOW_EVIL_CONSTRUCTORS(ThreadPool);
-	typedef std::vector<std::shared_ptr<Thread>> ThreadVector;
-
-	class TaskQueue
-	{
-	public:
-		TaskQueue() {}
-		~TaskQueue() {}
-
-		void put(const TaskMethod &task)
-		{
-			MutexLockGuard lock(_mutex);
-			_tasks.push(task);
-			_sem.signal();
-		}
-		ThreadCallback get()
-		{
-			TaskMethod task;
-			_sem.wait(Semaphore::kInfinite);
-			MutexLockGuard lock(_mutex);
-			task = _tasks.front();
-			_tasks.pop();
-			return task;
-		}
-
-	private:
-		THEFOX_DISALLOW_EVIL_CONSTRUCTORS(TaskQueue);
-		typedef std::queue<TaskMethod> Tasks;
-		Tasks _tasks;
-		MutexLock _mutex;
-		Semaphore _sem;
-	};
-
-	// 添加工作线程
-	void addWorker(int threadNum)
-	{
-		for (int i = 0; i < threadNum; ++i) {
-			std::shared_ptr<Thread> thread(new Thread(std::bind(&ThreadPool::taskRunner, this)));
-			_threads.push_back(thread);
-			thread->start();
-		}
-	}
-
-	// 运行任务
-	void taskRunner()
-	{
-		while(true) {
-			TaskMethod task = _tasks.get();
-			task();
-		}
-	}
-
-	bool _inited;
-	ThreadVector _threads;
-	TaskQueue _tasks;
-
-	static const int32_t kDefaultThreadNum = 10;
+	std::vector<work_thread_ptr> _thread_vec;
+	std::condition_variable _task_get;
+	std::mutex _task_queue_mutex;
+	std::queue<task_t> _task_queue;
+	std::atomic<bool> _is_stop_thread_pool;
+	std::once_flag _call_flag;
 };
-
-} // base
-
-#endif // _BASE_THREAD_POOL_HPP_
+}
+#endif

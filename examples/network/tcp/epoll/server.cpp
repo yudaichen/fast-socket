@@ -5,11 +5,11 @@
 
  1、创建句柄 ，参数size用来告诉内核监听的文件描述符的个数，跟内存大小有关
  	#include <sys/epoll.h>
-	int epoll_create(int size)		size：监听数目
+ ///TODO:	int epoll_create(int size)		size：监听数目
 
  2、控制某个epoll监控的文件描述符上的事件：注册、修改、删除
 		 #include <sys/epoll.h>
-			int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)
+ ///TODO:			int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)
 				epfd：	为epoll_creat的句柄
 				op：	表示动作，用3个宏来表示：
 					EPOLL_CTL_ADD (注册新的fd到epfd)，
@@ -38,7 +38,7 @@
 
  3、 等待所监控文件描述符上有事件的产生，类似于select()调用
  	#include <sys/epoll.h>
-	int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout)
+ ///TODO:	int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout)
 		events：		用来存内核得到事件的集合，
 		maxevents：	告之内核这个events有多大，这个maxevents的值不能大于创建epoll_create()时的size，
 		timeout：	是超时时间

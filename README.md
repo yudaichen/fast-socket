@@ -1,6 +1,7 @@
 # fastSocket
 
 #### 介绍
+
 最快的服务器
 
 #### 软件架构
@@ -13,8 +14,11 @@
 |  include | utils-collection  |  项目通用容器封装类-头文件 |
 |  include | utils-concurrent  |  项目通用多线程封装类-头文件 |
 |  include | utils-magic  |  项目通用魔法类-头文件 |
+|  include | common |  项目通用基础架构-头文件 |
+|  src | utils-collection  |  项目通用容器封装类-实现 |
 |  src | utils-concurrent  |  项目通用多线程封装类-实现 |
-|  src | utils-magic  |  项目通用魔法操作类-实现 |
+|  src | utils-magic  |  项目通用魔法类-实现 |
+|  src | common |  项目通用基础架构-实现 |
 
 #### 使用说明
 
@@ -29,8 +33,7 @@
 
 #### 结语
 
-“Any fool can write code that a computer can understand. Good programmers write code that humans can understand.”
-― Martin Fowler
+“Any fool can write code that a computer can understand. Good programmers write code that humans can understand.” ―
+Martin Fowler
 
-“任何傻瓜都可以编写计算机可以理解的代码。 优秀的程序员编写人类可以理解的代码。”
-——马丁·福勒
+“任何傻瓜都可以编写计算机可以理解的代码。 优秀的程序员编写人类可以理解的代码。” ——马丁·福勒

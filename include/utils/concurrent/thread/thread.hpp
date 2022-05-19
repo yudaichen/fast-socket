@@ -7,7 +7,6 @@
 #define _BASE_THREAD_HPP_
 
 #include <vector>
-#include <base/common.h>
 
 #ifdef WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -121,7 +120,7 @@ public:
 #endif
 
 private:
-	THEFOX_DISALLOW_EVIL_CONSTRUCTORS(Thread);
+	//THEFOX_DISALLOW_EVIL_CONSTRUCTORS(Thread);
 
 #ifdef WIN32
 	static DWORD WINAPI threadProc(LPVOID param)
@@ -197,7 +196,7 @@ public:
 	size_t size() const { return _threads.size(); }
 
 private:
-	THEFOX_DISALLOW_EVIL_CONSTRUCTORS(ThreadGroup);
+	//THEFOX_DISALLOW_EVIL_CONSTRUCTORS(ThreadGroup);
 	std::vector<Thread *> _threads;
 };
 

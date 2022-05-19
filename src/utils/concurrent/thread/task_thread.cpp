@@ -15,7 +15,7 @@ task_thread::~task_thread()
 
 void task_thread::stop()
 {
-    active_ = false;
+    active_ = true;
     if (thread_->joinable())
     {
         thread_->join();

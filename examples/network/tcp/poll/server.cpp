@@ -3,7 +3,7 @@
     @brief     poll
 
 #include <poll.h>
-int poll(struct pollfd *fds, nfds_t nfds, int timeout);
+///TODO: int poll(struct pollfd *fds, nfds_t nfds, int timeout);
 
 	struct pollfd {
 		int fd; // 文件描述符

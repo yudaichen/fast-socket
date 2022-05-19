@@ -7,9 +7,9 @@
 #include <cstring>
 
 /**
- * @brief string ¹¤¾ßÀà
- * @Item lexicalCast ÀàĞÍ×ª»»
- * @Item StringUtil ×Ó´«³Ğ´¦Àí¹¤¾ß
+ * @brief string å·¥å…·ç±»
+ * @Item lexicalCast ç±»å‹è½¬æ¢
+ * @Item StringUtil å­ä¼ æ‰¿å¤„ç†å·¥å…·
  */
 namespace fast
 {
@@ -17,7 +17,7 @@ class lexicalCast
 {
 
 public:
-	// ¼ò»¯µ÷ÓÃ
+	// ç®€åŒ–è°ƒç”¨
 	template<typename To, typename From>
 	static To cast(const From &from)
 	{
@@ -25,13 +25,13 @@ public:
 	}
 
 private:
-	// Ä£°åÌØ»¯¶¨Òå
+	// æ¨¡æ¿ç‰¹åŒ–å®šä¹‰
 	template<typename To, typename From>
 	struct converter
 	{
 	};
 
-	// ×ª»»µ½intÀàĞÍ
+	// è½¬æ¢åˆ°intç±»å‹
 	template<typename From>
 	struct converter<int, From>
 	{
@@ -41,7 +41,7 @@ private:
 		{ return std::atoi(from); }
 	};
 
-	// ×ª»»µ½longÀàĞÍ
+	// è½¬æ¢åˆ°longç±»å‹
 	template<typename From>
 	struct converter<long, From>
 	{
@@ -51,7 +51,7 @@ private:
 		{ return std::atol(from); }
 	};
 
-	// ×ª»»µ½long longÀàĞÍ
+	// è½¬æ¢åˆ°long longç±»å‹
 	template<typename From>
 	struct converter<long long, From>
 	{
@@ -61,7 +61,7 @@ private:
 		{ return std::atoll(from); }
 	};
 
-	// ×ª»»µ½doubleÀàĞÍ
+	// è½¬æ¢åˆ°doubleç±»å‹
 	template<typename From>
 	struct converter<double, From>
 	{
@@ -71,7 +71,7 @@ private:
 		{ return std::atof(from); }
 	};
 
-	// ×ª»»µ½floatÀàĞÍ
+	// è½¬æ¢åˆ°floatç±»å‹
 	template<typename From>
 	struct converter<float, From>
 	{
@@ -81,7 +81,7 @@ private:
 		{ return static_cast<float>(std::atof(from)); }
 	};
 
-	// ×ª»»µ½boolÀàĞÍ
+	// è½¬æ¢åˆ°boolç±»å‹
 	template<typename From>
 	struct converter<bool, From>
 	{
@@ -91,7 +91,7 @@ private:
 		{ return std::atoi(from.c_str()) > 0; }
 	};
 
-	// ×ª»»µ½stringÀàĞÍ
+	// è½¬æ¢åˆ°stringç±»å‹
 	template<typename From>
 	struct converter<std::string, From>
 	{
@@ -114,10 +114,10 @@ class StringUtil
 {
 public:
 	/**
-	 * @brief Ïò×óĞŞ¼ô
-	 * @param str Ô´×Ö·û´®
-	 * @param token Ìõ¼ş×Ö·û´®
-	 * @return ²Ã¼ôºóµÄ×Ö·û´®
+	 * @brief å‘å·¦ä¿®å‰ª
+	 * @param str æºå­—ç¬¦ä¸²
+	 * @param token æ¡ä»¶å­—ç¬¦ä¸²
+	 * @return è£å‰ªåçš„å­—ç¬¦ä¸²
 	 */
 	static std::string trimLeft(const std::string &str, const std::string &token = " ")
 	{
@@ -127,10 +127,10 @@ public:
 	}
 
 	/**
-	 * @brief ÏòÓÒĞŞ¼ô
-	 * @param str Ô´×Ö·û´®
-	 * @param token Ìõ¼ş×Ö·û´®
-	 * @return ²Ã¼ôºóµÄ×Ö·û´®
+	 * @brief å‘å³ä¿®å‰ª
+	 * @param str æºå­—ç¬¦ä¸²
+	 * @param token æ¡ä»¶å­—ç¬¦ä¸²
+	 * @return è£å‰ªåçš„å­—ç¬¦ä¸²
 	 */
 	static std::string trimRight(const std::string &str, const std::string &token = " ")
 	{
@@ -140,10 +140,10 @@ public:
 	}
 
 	/**
-	 * @brief ¸ù¾İ×Ö·ûÍ¬Ê± ×óÓÒĞŞ¼ô£¬Ä¬ÈÏÕûÀí¿Õ¸ñ
-	 * @param str Ô´×Ö·û´®
-	 * @param token Ìõ¼ş×Ö·û´®
-	 * @return ²Ã¼ôºóµÄ×Ö·û´®
+	 * @brief æ ¹æ®å­—ç¬¦åŒæ—¶ å·¦å³ä¿®å‰ªï¼Œé»˜è®¤æ•´ç†ç©ºæ ¼
+	 * @param str æºå­—ç¬¦ä¸²
+	 * @param token æ¡ä»¶å­—ç¬¦ä¸²
+	 * @return è£å‰ªåçš„å­—ç¬¦ä¸²
 	 */
 	static std::string trim(const std::string &str, const std::string &token = " ")
 	{
@@ -154,9 +154,9 @@ public:
 	}
 
 	/**
-	 * @brief ×ª´óĞ´
-	 * @param str Ô´×Ö·û´®
-	 * @return ×ª»»ºóµÄ×Ö·û´®
+	 * @brief è½¬å¤§å†™
+	 * @param str æºå­—ç¬¦ä¸²
+	 * @return è½¬æ¢åçš„å­—ç¬¦ä¸²
 	 */
 	static std::string toLower(const std::string &str)
 	{
@@ -166,9 +166,9 @@ public:
 	}
 
 	/**
-	 * @brief ×ªĞ¡Ğ´
-	 * @param str Ô´×Ö·û´®
-	 * @return ×ª»»ºóµÄ×Ö·û´®
+	 * @brief è½¬å°å†™
+	 * @param str æºå­—ç¬¦ä¸²
+	 * @return è½¬æ¢åçš„å­—ç¬¦ä¸²
 	 */
 	static std::string toUpper(const std::string &str)
 	{
@@ -178,9 +178,9 @@ public:
 	}
 
 	/**
-	 * @brief µ±Ç°µÄ×Ö·ûÊÇ·ñÒÔ×Ö´®¿ªÍ·
-	 * @param str Ô´×Ö·û´®
-	 * @param subStr ×Ó´®
+	 * @brief å½“å‰çš„å­—ç¬¦æ˜¯å¦ä»¥å­—ä¸²å¼€å¤´
+	 * @param str æºå­—ç¬¦ä¸²
+	 * @param subStr å­ä¸²
 	 * @return bool
 	 */
 	static bool startsWith(const std::string &str, const std::string &subStr)
@@ -189,9 +189,9 @@ public:
 	}
 
 	/**
-	 * @brief µ±Ç°µÄ×Ö·ûÊÇÒÔ×Ö´®½áÎ²
-	 * @param str Ô´×Ö·û´®
-	 * @param subStr ×Ö´®
+	 * @brief å½“å‰çš„å­—ç¬¦æ˜¯ä»¥å­—ä¸²ç»“å°¾
+	 * @param str æºå­—ç¬¦ä¸²
+	 * @param subStr å­—ä¸²
 	 * @return bool
 	 */
 	static bool endsWith(const std::string &str, const std::string &substr)
@@ -200,9 +200,9 @@ public:
 	}
 
 	/**
-	 * @brief ºöÂÔ´óĞ¡Ğ´Æ¥ÅäÊÇ·ñÏàµÈ
-	 * @param str1 ±È½Ï1
-	 * @param str2 ±È½Ï2
+	 * @brief å¿½ç•¥å¤§å°å†™åŒ¹é…æ˜¯å¦ç›¸ç­‰
+	 * @param str1 æ¯”è¾ƒ1
+	 * @param str2 æ¯”è¾ƒ2
 	 * @return bool
 	 */
 	static bool equalsIgnoreCase(const std::string &str1, const std::string &str2)
@@ -211,9 +211,9 @@ public:
 	}
 
 	/**
-	 * @brief ·Ö¸î×Ö·û´®
-	 * @param str Ô´×Ö´®
-	 * @param delimiter ·Ö¸ô·û
+	 * @brief åˆ†å‰²å­—ç¬¦ä¸²
+	 * @param str æºå­—ä¸²
+	 * @param delimiter åˆ†éš”ç¬¦
 	 * @return std::vector
 	 */
 	static std::vector<std::string> split(const std::string &str, const std::string &delimiter)
@@ -238,9 +238,9 @@ public:
 	}
 
 	/**
-	 * @brief ×Ö´®ÊÇ·ñ°üº¬ÔÚÔ´´®ÖĞ
-	 * @param str Ô´´®
-	 * @param token ²éÕÒ´®
+	 * @brief å­—ä¸²æ˜¯å¦åŒ…å«åœ¨æºä¸²ä¸­
+	 * @param str æºä¸²
+	 * @param token æŸ¥æ‰¾ä¸²
 	 * @return bool
 	 */
 	static bool contains(const std::string &str, const std::string &token)

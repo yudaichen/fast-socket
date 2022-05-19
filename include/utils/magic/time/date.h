@@ -66,6 +66,7 @@ Time:
 #include <sstream>
 #include <iomanip>
 #include <string.h>
+#include <chrono>
 
 #if (defined _WIN32) || (defined WIN32) || (defined _WIN64) || (defined WIN64)
 #define PLATFORM_WINDOWS
@@ -79,7 +80,18 @@ Time:
 
 typedef int64_t int64;
 
-namespace ec
+//用于分析代码执行耗时的宏定义。。
+#define CLOCK_START(tag)  auto tag##_start = std::chrono::steady_clock::now();auto tag##_end = tag##_start;
+#define CLOCK_END(tag)  tag##_end =  std::chrono::steady_clock::now();
+#define CLOCK_NOW() LOG_INFO<<"--now";
+//#define DURATION_s(tag)  printf("%s costs %d s\n",#tag,std::chrono::duration_cast<std::chrono::seconds>(tag##_end - tag##_start).count());
+#define DURATION_s(tag) LOG_INFO << #tag << " costs " << std::chrono::duration_cast<std::chrono::seconds>(tag##_end - tag##_start).count() << " s";
+#define DURATION_ms(tag) LOG_INFO <<  #tag  <<" costs "<< std::chrono::duration_cast<std::chrono::milliseconds>(tag##_end - tag##_start).count()<<" ms";
+#define DURATION_us(tag) LOG_INFO << #tag << " costs " << std::chrono::duration_cast<std::chrono::microseconds>(tag##_end - tag##_start).count() << " us";
+#define DURATION_ns(tag) LOG_INFO << #tag << " costs " << std::chrono::duration_cast<std::chrono::nanoseconds>(tag##_end - tag##_start).count() << " ns";
+
+
+namespace fast
 {
 
 class Time;

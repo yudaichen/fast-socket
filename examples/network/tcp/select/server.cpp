@@ -2,7 +2,7 @@
 /* According to earlier standards */
 
 /*
-int select(int nfds, fd_set *readfds, fd_set *writefds,
+ //TODO: int select(int nfds, fd_set *readfds, fd_set *writefds,
            fd_set *exceptfds, struct timeval *timeout);
 
 nfds: 		监控的文件描述符集里最大文件描述符加1，因为此参数会告诉内核检测前多少个文件描述符的状态

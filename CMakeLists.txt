@@ -4,14 +4,25 @@ if (WIN32)
 else ()
     cmake_minimum_required(VERSION 3.16.3)
 endif ()
-set(APP_NAME fastSocket)
+set(APP_NAME my_test_dev)
 project(${APP_NAME})
-# 构建类型
-set(CMAKE_BUILD_TYPE "RELEASE")
+
+
+# 编译优化
+option(optimization "compile optimization" ON)
+
+# 子项目编译开关编译
+option(MAIN "compile main" ON)
+option(DESIGN_PATTERN "compile main" OFF)
+option(NETWORK "compile network" OFF)
+option(OPEN_CUDA "compile cuda " OFF)
 
 #包含cmake工具包 默认与项目根目录同级
 set(FAST_CMAKE_DIR "${CMAKE_SOURCE_DIR}/cmake")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${FAST_CMAKE_DIR}")
+
+#包含工具文件
+include(utils)
 
 # 此语句等价于 cmake -CMAKE_TOOLCHAIN_FILE = E:/repository/c++/vcpkg-2021.05.12/scripts/buildsystems/vcpkg.cmake
 if (WIN32)
@@ -21,60 +32,54 @@ if (WIN32)
     endif ()
 endif ()
 
-#c++ 14设置
-set(CMAKE_CXX_STANDARD 14)
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    message("-std=c++14")
-    set(CMAKE_CXX_FLAGS "-std=c++14 $ENV{CXXFLAGS}")
-    if (CMAKE_BUILD_TYPE MATCHES "DEBUG|Debug|debug")
-        set(CMAKE_CXX_FLAGS_DEBUG "-O0 -Wall -g2 -ggdb")
-    endif ()
-    find_package(OpenMP REQUIRED)
-    if (OPENMP_FOUND)
-        message("OPENMP FOUND")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS} ")
-        set(CMAKE_SHARE_LINKER_FLAGS "${CMAKE_SHARE_LINKER_FLAGS} ${OpenMP_SHARE_LINKER_FLAGS}")
-    endif ()
-else ()
-    if (CMAKE_SYSTEM_NAME MATCHES "Windows")
-        set(my_std_pre "/std:")
+if (optimization)
+
+    #c++ 14设置
+    #-----------c++ 14 start----------
+    # 设置指定的C++编译器版本是必须的，如果不设置，或者为OFF，则指定版本不可用时，会使用上一版>本。
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    # 指定为C++14 版本
+    set(CMAKE_CXX_STANDARD 14)
+    #-----------c++ 14 end-------------
+
+    # 构建类型
+    if (NOT CMAKE_BUILD_TYPE)
+        set(CMAKE_BUILD_TYPE "Release")
     else ()
-        set(my_std_pre "-std=14")
+        set(CMAKE_BUILD_TYPE "Debug")
     endif ()
 
-    set(basic_cxx14 "c++14")
-    set(str_cxx14 "${my_std_pre}${basic_cxx14}")
-
-    include(CheckCXXCompilerFlag)
-    check_cxx_compiler_flag("${str_cxx14}" _cpp_14_flag_supported)
-    if (_cpp_14_flag_supported)
-        set(CMAKE_CXX_STANDARD 14)
+    # clang 编译器优化
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        list(APPEND CXX_FLAGS "-Wno-null-dereference")
+        list(APPEND CXX_FLAGS "-Wno-sign-conversion")
+        list(APPEND CXX_FLAGS "-Wno-unused-local-typedef")
+        list(APPEND CXX_FLAGS "-Wthread-safety")
+        list(REMOVE_ITEM CXX_FLAGS "-rdynamic")
     endif ()
+    string(REPLACE ";" " " CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 
+    # 编译优化选项
+    set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g2 -ggdb")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
+    #[[set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+    set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)]]
 endif ()
 
 
-# 用于递归添加头文件
-function(include_sub_directories_recursively root_dir)
 
-    if (IS_DIRECTORY ${root_dir})   # 当前路径是一个目录吗，是的话就加入到包含目录
-        #MESSAGE("CURRENT DIR PATH: " ${root_dir})
-        #屏蔽一些特殊目录
-        if (NOT (${root_dir} MATCHES ".vscode|.vs|release"))
-            #MESSAGE("include dir: " ${root_dir})
-            include_directories(${root_dir})
-        endif ()
+if (OPEN_CUDA)
+
+    find_package(CUDA)
+
+    if (${CUDA_FOUND})
+        include_directories(${CUDA_INCLUDE_DIRS})
+        link_directories($ENV{CUDA_PATH}/lib/x64)
+        message(${CUDA_INCLUDE_DIRS})
+    else ()
+        message(STATUS "cuda not found!")
     endif ()
-
-    file(GLOB ALL_SUB RELATIVE ${root_dir} ${root_dir}/*) # 获得当前目录下的所有文件，让如ALL_SUB列表中
-    foreach (sub ${ALL_SUB})
-        if (IS_DIRECTORY ${root_dir}/${sub})
-            include_sub_directories_recursively(${root_dir}/${sub}) # 对子目录递归调用，包含
-        endif ()
-    endforeach ()
-endfunction()
+endif ()
 
 # 链接库
 if (WIN32)
@@ -100,17 +105,16 @@ else ()
     #添加头文件搜索路径
     include_directories(/usr/include)
     #添加库文件搜索路径
-    #ubuntu link_directories ( /usr/lib/x86_64-linux-gnu )
-    link_directories(/usr/lib) #cygwin
-    link_libraries(boost_log boost_system boost_thread boost_filesystem boost_atomic boost_date_time boost_chrono boost_regex)
+    #ubuntu
+    link_directories(/usr/lib/x86_64-linux-gnu)
+
+    #cygwin
+    #link_directories(/usr/lib)
+    link_libraries(boost_log boost_system boost_thread boost_filesystem boost_atomic boost_date_time boost_chrono boost_regex glog)
     # 添加其他支持
-    link_libraries(pthread)
+    link_libraries(pthread dl)
 endif ()
 
-# 编译开关
-set(MAIN ON)
-set(DESIGN_PATTERN OFF)
-set(NETWORK ON)
 
 if (MAIN)
     # 包含头文件目录
@@ -126,8 +130,10 @@ if (MAIN)
     # 归一化
     set(ALL_SRCS ${SOURCE_FILES} ${INCLUDE_FILES})
 
-    # 目录设置
-    add_executable(${APP_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp ${ALL_SRCS})
+    # gcc -c ${CMAKE_SOURCE_DIR}/src/server.cpp ${ALL_SRCS} -o ${name}
+    add_executable(${APP_NAME}-server ${CMAKE_SOURCE_DIR}/main/server.cpp ${ALL_SRCS})
+    add_executable(${APP_NAME}-client ${CMAKE_SOURCE_DIR}/main/client.cpp ${ALL_SRCS})
+    add_executable(${APP_NAME}-test ${CMAKE_SOURCE_DIR}/main/test.cpp ${ALL_SRCS})
 endif ()
 
 # 包含设计模式

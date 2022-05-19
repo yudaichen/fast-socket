@@ -1,0 +1,77 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "my_test_dev",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "my_test_dev-client::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-my_test_dev-client-Debug-e25e0bab328f47bd32f4.json",
+					"name" : "my_test_dev-client",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "my_test_dev-server::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-my_test_dev-server-Debug-e14ad53792d8063605d6.json",
+					"name" : "my_test_dev-server",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "my_test_dev-test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-my_test_dev-test-Debug-e7ebb1963592b3f3c973.json",
+					"name" : "my_test_dev-test",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/mnt/e/development/openSource/fast-socket/cmake-build-linux-debug",
+		"source" : "/mnt/e/development/openSource/fast-socket"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

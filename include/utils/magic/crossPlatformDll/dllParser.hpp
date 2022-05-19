@@ -1,5 +1,5 @@
-#ifndef _DLLPARSER_H
-#define _DLLPARSER_H
+#ifndef _DLL_PARSER_H
+#define _DLL_PARSER_H
 
 #ifdef _WIN32
 #include "windows.h"
@@ -9,8 +9,10 @@ typedef FARPROC FunctionAddress;
 #else
 
 #include <dlfcn.h>
-typedef void* DllHandle;
-typedef void* FunctionAddress;
+
+typedef void *DllHandle;
+
+typedef void *FunctionAddress;
 
 #endif //_WIN32
 
@@ -22,7 +24,7 @@ typedef void* FunctionAddress;
 #include <unordered_map>
 #include <functional>
 #include <memory>
-
+#include "gLog.h"
 
 /**
  * @brief 跨平台dll加载器
@@ -46,9 +48,9 @@ public:
 		if (m_handle == nullptr)
 		{
 #ifdef _WIN32
-			std::cerr << "Open dll failed, error: " << dllFilePath << std::endl;
+			std::cerr << "Open dll failed, error: " << dllFilePath;
 #else
-			std::cout << "Open dll failed, error: " << dlerror() << std::endl;
+			LOG_ERROR << "Open dll failed, error: " << dlerror();
 #endif //_WIN32
 			return false;
 		}
@@ -73,13 +75,13 @@ public:
 #ifdef _WIN32
 		if (ret < 1)
 		{
-			std::cout << "Close dll failed, error: " << std::endl;
+			LOG_ERROR << "Close dll failed, error: ";
 			return false;
 		}
 #else
 		if (ret != 0)
 		{
-			std::cout << "Close dll failed, error: " << dlerror() << std::endl;
+			LOG_ERROR << "Close dll failed, error: " << dlerror();
 			return false;
 		}
 
@@ -102,9 +104,9 @@ public:
 			if (address == nullptr)
 			{
 #ifdef _WIN32
-				std::cout << "func is nullptr, error " << std::endl;
+				LOG_ERROR << "func is nullptr, error ";
 #else
-				std::cout << "func is nullptr, error: " << dlerror() << std::endl;
+				LOG_ERROR << "func is nullptr, error: " << dlerror();
 #endif //_WIN32
 
 				return nullptr;
@@ -136,4 +138,4 @@ private:
 	std::unordered_map<std::string, FunctionAddress> m_funcMap;
 };
 
-#endif
+#endif //_DLL_PARSER_H
