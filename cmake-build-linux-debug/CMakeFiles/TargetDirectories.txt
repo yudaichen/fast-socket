@@ -1,5 +1,0 @@
-/mnt/e/development/openSource/fast-socket/cmake-build-linux-debug/CMakeFiles/rebuild_cache.dir
-/mnt/e/development/openSource/fast-socket/cmake-build-linux-debug/CMakeFiles/edit_cache.dir
-/mnt/e/development/openSource/fast-socket/cmake-build-linux-debug/CMakeFiles/my_test_dev-test.dir
-/mnt/e/development/openSource/fast-socket/cmake-build-linux-debug/CMakeFiles/my_test_dev-client.dir
-/mnt/e/development/openSource/fast-socket/cmake-build-linux-debug/CMakeFiles/my_test_dev-server.dir
